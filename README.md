@@ -135,7 +135,14 @@ chipilito/
 ```
 
 ---
-
 ## 📄 Lizenz
 
-MIT License 🚀
+Dieses Projekt ist unter der MIT-Lizenz lizenziert. Siehe die [LICENSE](LICENSE)-Datei für Details.
+
+---
+
+## 👥 Mitwirken & Support
+
+Beiträge, Fehlerberichte und Feature-Anfragen sind herzlich willkommen! Erstelle dazu einfach ein Issue oder einen Pull Request.
+
+*Copyright (C) Noel Joan - 2026. Alle Rechte vorbehalten.*
