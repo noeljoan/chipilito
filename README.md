@@ -74,7 +74,7 @@ Sprachmodelle werden komplett in RAM (CPU-Modus) oder VRAM (GPU-Modus) geladen. 
 ## 🚀 Schnellstart
 
 ```bash
-git clone https://github.com/yourusername/chipilito.git
+git clone https://github.com/noeljoan/chipilito.git
 cd chipilito
 npm install
 cp .env.example .env   # Werte nach Bedarf anpassen
