@@ -29,7 +29,7 @@ A lightweight, **offline-first** AI chatbot that runs on your machine. Features:
 ## 🚀 Quick Start
 
 `ash
-git clone https://github.com/yourusername/chipilito.git
+git clone https://github.com/noeljoan/chipilito.git
 cd chipilito
 npm ci
 cp .env.example .env  # edit optional vars
