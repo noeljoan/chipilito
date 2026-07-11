@@ -54,7 +54,7 @@ Server runs on http://localhost:3000.
 ## ✅ What's Working
 
 - User registration & login
-- Password hashing (cryptjs)
+- Password hashing (cryptjs)
 - API key generation
 - Profile management
 - File parsing (PDF, DOCX, XLSX)
