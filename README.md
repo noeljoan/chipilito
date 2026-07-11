@@ -7,8 +7,6 @@ A lightweight, **offline-first** AI chatbot that runs on your machine. Features:
 - Chat with **Ollama** or **Google Gemini** models
 - **File analysis**: PDF, DOCX, XLSX, images
 - **User accounts** with password authentication & API keys
-- **Real math calculations** (no LLM guesswork)
-
 ---
 
 ## 🛠️ System Requirements (Minimum)
