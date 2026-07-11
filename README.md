@@ -1,6 +1,6 @@
 ﻿# Chipilito – Modern Local AI Chatbot with User Authentication
 
-![Chipilito logo](https://github.com/noeljoan/chipilito/edit/main/public/logo.png)
+![Chipilito logo](https://github.com/noeljoan/chipilito/public/logo.png)
 
 A lightweight, **offline-first** AI chatbot that runs on your machine. Features:
 
