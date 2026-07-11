@@ -57,7 +57,6 @@ Server runs on http://localhost:3000.
 - Password hashing (cryptjs)
 - API key generation
 - Profile management
-- Real math evaluation (2+3*4-5 → 9)
 - File parsing (PDF, DOCX, XLSX)
 
 ---
