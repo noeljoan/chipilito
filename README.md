@@ -89,6 +89,9 @@ Für lokale Modelle zusätzlich [Ollama installieren](https://ollama.com) und da
 ollama pull gemma2
 ollama serve
 ```
+## 🖼️ Screenshot
+
+![Dashboard](screenshot.png)
 
 ---
 
