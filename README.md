@@ -124,6 +124,16 @@ Der Login ist optional – ohne Konto kann man als Gast weiterchatten. Chats wer
 
 ---
 
+## 🌍 Mehrsprachigkeit
+
+Die Oberfläche gibt es komplett auf **Deutsch, Englisch, Französisch und Spanisch** – umschaltbar über den kleinen Sprachwähler oben in der Sidebar (🇩🇪 🇬🇧 🇫🇷 🇪🇸).
+
+- Übersetzt werden alle Buttons, Platzhalter, Tooltips, die Login/Registrieren-Maske, Fehler-/Bestätigungsmeldungen sowie die **Willkommensnachricht** beim Start eines neuen Chats.
+- Die Wahl wird im Browser gespeichert (`localStorage`) und beim nächsten Besuch automatisch wieder geladen; ohne vorherige Auswahl wird die Browsersprache erkannt (Fallback: Deutsch).
+- Markenname ("Chipilito") sowie die Widmung in der Kopfzeile bleiben unabhängig von der gewählten Sprache unverändert.
+
+---
+
 ## 🗺️ Projektstruktur
 
 ```
