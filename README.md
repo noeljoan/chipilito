@@ -61,4 +61,4 @@ Server runs on http://localhost:3000.
 
 ---
 
-MIT License – fork away! 🚀
+MIT License 🚀
