@@ -92,8 +92,14 @@ ollama serve
 ## 🖼️ Screenshot
 
 ![Dashboard](screenshot.png)
+Anmeldung
 
 ---
+
+![Dashboard](screenshot1.png)
+Chatbot GUI
+
+
 
 ## ⚙️ Konfiguration (`.env`)
 
