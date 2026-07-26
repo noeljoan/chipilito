@@ -280,8 +280,8 @@ Login erhaltenen Schlüssel.
 | `PUT` | `/api/chats/:id/pin` \| `/rename` | Chat anheften / umbenennen |
 | `POST` | `/api/chats/:id/addToProject` | Projekt zuordnen (`project_id: null` entfernt) |
 | `POST` | `/api/chats/:id/generateTitle` | Kurzen Chat-Titel per KI generieren |
-| `GET`/`POST` | `/api/yumProjects` | Projekte auflisten / anlegen |
-| `PUT`/`DELETE` | `/api/yumProjects/:id` | Projekt umbenennen / löschen |
+| `GET`/`POST` | `/api/zumProjects` | Projekte auflisten / anlegen |
+| `PUT`/`DELETE` | `/api/zumProjects/:id` | Projekt umbenennen / löschen |
 | `GET`/`PUT` | `/api/favorites` | Favorisierte Modelle laden / speichern |
 | `POST` | `/api/export` | Antwort als PDF/Word/Excel exportieren |
 | `GET`/`POST` | `/api/backups` | DB-Backups auflisten / manuell auslösen |
