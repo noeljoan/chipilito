@@ -100,8 +100,8 @@ Die Projekt-Überschriften in der Sidebar (unter "Projekte") haben jetzt beim
 Hovern ein eigenes kleines ⋮-Menü mit **Umbenennen** und **Löschen** - analog
 zum bestehenden Menü bei einzelnen Chats.
 
-- **Backend**: neue Funktionen `renameYumProject()`/`deleteYumProject()` in
-  `db.js` sowie `PUT`/`DELETE /api/yumProjects/:id` in `server.js`. Die
+- **Backend**: neue Funktionen `renamezumProject()`/`deletezumProject()` in
+  `db.js` sowie `PUT`/`DELETE /api/zumProjects/:id` in `server.js`. Die
   Projekt-Liste ist wie bisher kontoübergreifend gemeinsam (kein
   Besitzer-Konzept je Projekt) - jeder eingeloggte Nutzer kann jedes Projekt
   umbenennen/löschen.
@@ -198,7 +198,7 @@ strikt pro Adresse getrennt, ein Server-Neustart selbst löscht es nicht.
 
 **Sidebar-Gruppierung wie im Referenz-Screenshot:** Die Chat-Liste ist jetzt
 in Abschnitte gegliedert:
-- **"Projekte"**: Chats werden nach zugeordnetem Yum-Projekt gruppiert, mit
+- **"Projekte"**: Chats werden nach zugeordnetem zum-Projekt gruppiert, mit
   eigener Überschrift je Projekt.
 - **"Aktuelle"**: alle nicht zugeordneten Chats darunter (nur als eigene
   Überschrift, wenn auch mindestens ein Projekt vorhanden ist - sonst gäbe es
@@ -302,16 +302,12 @@ voll ist: im Browser die Website-Daten für `localhost:3000` löschen
 
 ## [2026-07-23] - Projekt-Badge, Wortlaut & Sprachwechsel-Fixes
 
-- **"Zum Projekt" statt "Yum-Projekt"**: Der Text zum Anlegen eines neuen
-  Projekts hieß "Yum-Projekt hinzufügen" – heißt jetzt "Neues Projekt
-  erstellen" (die Aktion im ⋮-Menü selbst hieß schon vorher korrekt
-  "Zum Projekt hinzufügen").
 - **Projekt-Zugehörigkeit war nirgends sichtbar**: `handleAddToProject` schrieb
   bisher den Platzhalter-String `'project'` in den Chat statt der echten
   Projekt-ID/des Namens – dadurch tauchte die Zuordnung nirgends in der
   Oberfläche auf. Jetzt zeigt jeder zugeordnete Chat in der Sidebar einen
   kleinen 📁-Badge mit Projektnamen (Projektnamen werden per
-  `GET /api/yumProjects` gecacht).
+  `GET /api/zumProjects` gecacht).
 - **Sprachwechsel blieb teilweise auf Deutsch**: Modell-Gruppen im
   Modell-Umschalter ("Ollama (lokal)", "OpenAI-kompatibel" etc.) waren fest
   auf Deutsch verdrahtet statt übersetzt zu werden; Buttons an bereits
@@ -349,23 +345,23 @@ Das Frontend (`public/app.js`, `public/styles.css`) hatte das Drei-Punkte-Menü
 komplett. Ergänzt:
 
 - **Backend** (`server.js`): neue Endpoints
-  - `GET /api/chats` – Chats des Kontos laden (inkl. `pinned`, `yum_project_id`)
+  - `GET /api/chats` – Chats des Kontos laden (inkl. `pinned`, `zum_project_id`)
   - `PUT /api/chats/:id` – Chat speichern/aktualisieren (Titel + Nachrichten)
   - `DELETE /api/chats/:id` – Chat löschen
   - `PUT /api/chats/:id/pin` – Anheften umschalten (angeheftete Chats erscheinen oben)
   - `PUT /api/chats/:id/rename` – Chat umbenennen
-  - `POST /api/chats/:id/addToProject` – Chat einem Yum-Projekt zuordnen
-  - `GET /api/yumProjects` / `POST /api/yumProjects` – Yum-Projekte auflisten/anlegen
-- **Datenbank** (`db.js`): `listChats` liefert jetzt `pinned`/`yum_project_id` und
+  - `POST /api/chats/:id/addToProject` – Chat einem zum-Projekt zuordnen
+  - `GET /api/zumProjects` / `POST /api/zumProjects` – zum-Projekte auflisten/anlegen
+- **Datenbank** (`db.js`): `listChats` liefert jetzt `pinned`/`zum_project_id` und
   sortiert angeheftete Chats nach oben; neue Funktionen `pinChat` und
   `addChatToProject`.
 - **Frontend** (`public/app.js`):
   - drei **Syntax-Fehler behoben**, die das Laden von `app.js` im Browser komplett
     verhindert haben (fehlende `}` im Übersetzungsobjekt, ein verwaister
     `catch`-Block ohne zugehörige Funktion, zwei Template-Strings ohne Backticks)
-  - beim Laden vom Server bleiben `pinned`/`yum_project_id` jetzt erhalten
+  - beim Laden vom Server bleiben `pinned`/`zum_project_id` jetzt erhalten
     (vorher gingen sie bei jedem Reload verloren)
-  - "Yum-Projekt hinzufügen" kann jetzt auch ein neues Projekt anlegen, statt nur
+  - "zum-Projekt hinzufügen" kann jetzt auch ein neues Projekt anlegen, statt nur
     zwischen bereits vorhandenen zu wählen
 - Ungenutzten, unvollständigen Entwurf `index.js` entfernt (war nirgends
   eingebunden, `server.js` ist der tatsächliche Einstiegspunkt)
