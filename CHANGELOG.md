@@ -80,17 +80,6 @@ Referenz-Screenshot:
 
 ---
 
-## [2026-07-24] - Letzte "Yum-Projekt"-Reste im Wortlaut entfernt
-
-Zwei Fehlermeldungen in `db.js` sagten noch "Yum-Projekt nicht gefunden" -
-jetzt "Projekt nicht gefunden". Genau diese Meldung dürfte auch den Fehler
-beim "Aus Projekt entfernen" ausgelöst haben, falls dabei noch die alte
-`db.js` (vor der letzten Änderung) lief - die neue Version behandelt
-`project_id: null` (Entfernen) als eigenen Fall, bevor überhaupt nach einem
-Projekt gesucht wird, und sollte den Fehler dann nicht mehr auslösen.
-
----
-
 ## [2026-07-24] - Chats wieder aus einem Projekt entfernen
 
 Chats, die einem Projekt zugeordnet sind, zeigen im ⋮-Menü jetzt **"Aus
