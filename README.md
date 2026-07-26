@@ -1,165 +1,207 @@
 <div align="center">
 
-# 🤖 Chipilito
+# 🐟 Chipilito
 
-**Ein schlanker, offline-fähiger KI-Chatbot mit lokaler Benutzerverwaltung**
+Ein schlanker, selbstgehosteter KI-Chatbot für Node.js – läuft wahlweise
+komplett lokal mit [Ollama](https://ollama.com), mit Google Gemini oder mit
+jedem OpenAI-kompatiblen Anbieter (z. B. [OpenRouter](https://openrouter.ai),
+LM Studio, Groq). Kein Framework-Overhead, keine externe Datenbank – nur
+Node.js, SQLite und ein einziger Server-Prozess.
 
-![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-blue.svg)
-![Ollama](https://img.shields.io/badge/Ollama-kompatibel-white?logo=ollama&logoColor=black)
-![Gemini](https://img.shields.io/badge/Gemini-API-4285F4?logo=googlegemini&logoColor=white)
-![Status](https://img.shields.io/badge/Status-aktive%20Entwicklung-orange)
-
+<p>
+  <img alt="Node" src="https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-blue">
+  <img alt="Version" src="https://img.shields.io/badge/version-2.0.0-d97757">
+</p>
 </div>
-
 ---
 
 ## ✨ Features
 
-| | |
-|---|---|
-| 💬 | Chat mit **Ollama** (lokal) oder **Google Gemini** (Cloud) |
-| 📎 | Dateianalyse: **PDF**, **Word (.docx)**, **Excel (.xlsx)**, reine Textdateien |
-| 🔐 | Benutzerkonten mit Passwort-Hashing (bcrypt) & API-Key-Authentifizierung, Chats pro Konto getrennt |
-| 🗄️ | Persistenz über eine lokale SQLite-Datenbank (`better-sqlite3`) – keine externe DB nötig |
-| ⚡ | Gestreamte Antworten für ein flüssiges Chat-Gefühl |
-| 🎙️ | Optionale Spracheingabe (Web Speech API, browserabhängig) |
+- 💬 **Mehrere KI-Anbieter** – Ollama (lokal), Google Gemini oder ein
+  beliebiger OpenAI-kompatibler Endpoint, jederzeit im Modell-Umschalter
+  wechselbar. Modelle lassen sich mit ⭐ favorisieren (kontogebunden
+  gespeichert).
+- 📌 **Chat-Verwaltung** – Anheften, Umbenennen, Löschen und Gruppieren von
+  Chats in **Projekte** über ein ⋮-Kontextmenü, ähnlich wie man es aus
+  modernen Chat-Oberflächen kennt.
+- 📁 **Projekte** – Chats lassen sich Projekten zuordnen (und wieder
+  entfernen), Projekte selbst können umbenannt oder gelöscht werden.
+- 📎 **Datei-Uploads** – per Klick oder **Drag & Drop** direkt in den
+  Chat-Bereich. Unterstützt PDF, Word (.docx), Excel, Bilder und mehr.
+- 📄 **Export** – Antworten lassen sich als PDF, Word oder Excel exportieren.
+- 📦 **ZIP-Download für Mehrdatei-Antworten** – enthält eine Antwort mehrere
+  Code-Blöcke (z. B. bei einer Projektkorrektur), bietet die App automatisch
+  einen "Als ZIP herunterladen"-Button an, inkl. automatischer
+  Dateinamen-Erkennung.
+- 🌍 **Mehrsprachig** – Deutsch, Englisch, Französisch, Spanisch.
+- 🔐 **Eigene Konten** – einfache Benutzerverwaltung (Name + Passwort) mit
+  kontoübergreifender Chat-Synchronisierung über SQLite.
+- 🎤 **Spracheingabe** über die Web Speech API des Browsers.
+- 🐳 **Docker-ready** – inkl. `docker-compose.yml` mit optionalem
+  Ollama-Container.
 
 ---
 
-## 🖥️ Hardware-Anforderungen
+## 📸 Screenshot
 
-Der Node.js-Server selbst ist sehr genügsam – der eigentliche Ressourcenbedarf hängt fast vollständig davon ab, **welches KI-Modell** du verwendest. Nutzt du die Gemini-Cloud-API, reicht praktisch jeder moderne PC ohne dedizierte GPU. Willst du komplett offline mit Ollama arbeiten, entscheidet primär RAM bzw. **VRAM der Grafikkarte** über die Antwortgeschwindigkeit.
-
-### Minimum – Basis-Server (nur Cloud-Modus, `CHATLITE_PROVIDER=gemini`)
-
-| Komponente | Minimum | Empfohlen |
-|---|---|---|
-| **OS** | Windows 10+, macOS 12+, Linux (Ubuntu 20.04+) | aktuelle Version |
-| **CPU** | Dual-Core x64, 2 GHz+ | Quad-Core |
-| **RAM** | 2 GB | 4 GB |
-| **GPU** | keine nötig | keine nötig |
-| **Speicherplatz** | 500 MB | 1 GB |
-| **Node.js** | 18.0.0+ | 20 LTS |
-| **Internet** | erforderlich | stabile Verbindung |
-
-### Minimum – lokaler Betrieb mit Ollama
-
-Sprachmodelle werden komplett in RAM (CPU-Modus) oder VRAM (GPU-Modus) geladen. Faustregel bei 4-Bit-Quantisierung (Ollama-Standard): **≈ 0,7–1 GB Speicher pro Milliarde Parameter**, zzgl. Kontext-Overhead. Eine GPU ist nicht zwingend erforderlich, beschleunigt die Ausgabe aber um ein Vielfaches.
-
-| Modell (Ollama-Tag) | Parameter | Downloadgröße (≈) | Minimum RAM | Empfohlene GPU (VRAM) | Tokens/Sek. (ca.) |
-|---|---|---|---|---|---|
-| `gemma2:2b` | 2B | ~1,6 GB | 4 GB RAM | ohne GPU nutzbar | 5–15 (CPU) |
-| `llama3.2:3b` | 3B | ~2,0 GB | 4 GB RAM | ohne GPU nutzbar | 5–15 (CPU) |
-| `gemma2` / `gemma2:9b` *(Standard)* | 9B | ~5,4 GB | 8 GB RAM | 8 GB VRAM (z. B. RTX 3060/4060) | 2–8 (CPU) / 30+ (GPU) |
-| `llama3.1:8b` | 8B | ~4,7 GB | 8 GB RAM | 8 GB VRAM | 2–8 (CPU) / 30+ (GPU) |
-| `gemma2:27b` | 27B | ~16 GB | 24 GB RAM | 24 GB VRAM (z. B. RTX 4090) | nicht empfohlen (CPU) / 15–25 (GPU) |
-
-> ⚠️ Alle Angaben sind Richtwerte und hängen von Kontextlänge, Quantisierung, Ollama-Version und Hintergrundlast ab. Ohne GPU läuft **jedes** Modell rein auf der CPU, größere Modelle (9B+) fühlen sich dabei aber spürbar zäh an – für flüssige Echtzeit-Antworten wird ab dem Standardmodell (`gemma2`, 9B) eine dedizierte GPU mit mindestens 8 GB VRAM empfohlen.
-
-### Welche Konfiguration passt zu mir?
-
-| Szenario | Empfehlung |
-|---|---|
-| 🌐 Immer online, gelegentlich chatten | `CHATLITE_PROVIDER=gemini` – keine GPU, minimale Hardwareanforderungen |
-| 💻 Alter/schwacher Laptop, offline | Ollama mit `gemma2:2b` oder `llama3.2:3b`, CPU reicht |
-| 🖥️ Normaler Desktop/Laptop ohne GPU | Ollama mit Standardmodell `gemma2` (9B) im CPU-Modus – funktioniert, aber langsamer |
-| 🎮 Dedizierte GPU vorhanden (ab 8 GB VRAM) | `gemma2:9b` oder `llama3.1:8b` läuft flüssig in Echtzeit |
-| 🏢 Workstation mit High-End-GPU (24 GB+ VRAM) | `gemma2:27b` für spürbar bessere Antwortqualität |
-
-**Zusätzlicher Speicherplatz** für Datei-Uploads/PDF-Verarbeitung ist normalerweise vernachlässigbar (Standard-Limit: `MAX_FILE_SIZE=5MB` pro Datei, siehe `.env`), sollte aber bei intensiver Nutzung mit einkalkuliert werden.
+*(Füge hier gerne einen Screenshot deiner Instanz ein, z. B.
+`![Chipilito](docs/screenshot.png)`)*
 
 ---
 
 ## 🚀 Schnellstart
 
+### Voraussetzungen
+
+- [Node.js](https://nodejs.org) ≥ 18
+- Optional: [Ollama](https://ollama.com) für lokale Modelle, oder ein API-Key
+  für Gemini/OpenRouter
+
+### Installation
+
 ```bash
-git clone https://github.com/noeljoan/chipilito.git
+git clone <dein-repo-url>
 cd chipilito
 npm install
-cp .env.example .env   # Werte nach Bedarf anpassen
+cp .env.example .env   # Werte nach Bedarf anpassen (siehe unten)
 npm start
 ```
 
-Der Server läuft anschließend unter **http://localhost:3000**.
+Die App läuft danach unter **http://localhost:3000**.
 
-Für lokale Modelle zusätzlich [Ollama installieren](https://ollama.com) und das gewünschte Modell einmal vorab laden:
+### Entwicklung (Auto-Reload)
 
 ```bash
-ollama pull gemma2
-ollama serve
+npm run dev
 ```
-## 🖼️ Screenshots
-
-![Dashboard](screenshot.png)
-Anmeldung
 
 ---
-
-![Dashboard](screenshot1.png)
-Chatbot GUI
-
-
 
 ## ⚙️ Konfiguration (`.env`)
 
-| Variable | Beschreibung | Standard |
+| Variable | Beschreibung | Default |
 |---|---|---|
-| `CHATLITE_PROVIDER` | `ollama` oder `gemini` | `ollama` |
-| `OLLAMA_URL` | Adresse des lokalen Ollama-Servers | `http://localhost:11434` |
-| `OLLAMA_MODEL` | Zu verwendendes Ollama-Modell | `gemma2` |
-| `GEMINI_API_KEY` | API-Key für Google Gemini (nur bei `CHATLITE_PROVIDER=gemini`) | – |
+| `CHATLITE_PROVIDER` | `ollama`, `gemini` oder `openai_compatible` | `ollama` |
+| `OLLAMA_URL` | URL des Ollama-Servers | `http://localhost:11434` |
+| `OLLAMA_MODEL` | Standard-Ollama-Modell | `gemma2` |
+| `OLLAMA_NUM_CTX` | Kontextfenster-Größe für Ollama | `21586` |
+| `GEMINI_API_KEY` | API-Key für Google Gemini | – |
+| `OPENAI_COMPATIBLE_URL` | Basis-URL des OpenAI-kompatiblen Anbieters | – |
+| `OPENAI_COMPATIBLE_API_KEY` | API-Key dafür | – |
+| `OPENAI_COMPATIBLE_MODEL` | Standardmodell dafür | – |
 | `PORT` | Server-Port | `3000` |
-| `MAX_FILE_SIZE` | Max. Uploadgröße pro Datei in Bytes | `5242880` (5 MB) |
+| `DB_PATH` | Pfad zur SQLite-Datei (relativ wird relativ zum Projektordner aufgelöst) | `./chipilito.db` |
+| `MAX_FILE_SIZE` | Maximale Upload-Größe in Bytes | `5242880` (5 MB) |
 
-> ℹ️ `LM_STUDIO_URL` ist in der `.env` als Platzhalter vorhanden; die eigentliche Routing-Logik für LM Studio als eigenständigen Provider ist im aktuellen `server.js` noch **nicht** implementiert (Anfragen mit `CHATLITE_PROVIDER=lmstudio` landen derzeit beim Ollama-Pfad). Wer LM Studio nutzen will, sollte vorerst dessen Ollama-kompatible API unter `OLLAMA_URL` eintragen.
+Eine vollständige Vorlage liegt in [`.env.example`](.env.example).
 
----
-
-## 🔐 Authentifizierung / API
-
-| Endpoint | Methode | Beschreibung |
-|---|---|---|
-| `/api/auth/register` | `POST` `{ name, password }` | Konto anlegen → liefert `api_key` |
-| `/api/auth/login` | `POST` `{ name, password }` | Login → liefert `api_key` |
-| `/api/auth/profile` | `GET` (Header `x-api-key`) | Profil abrufen |
-| `/api/auth/profile` | `PUT` (Header `x-api-key`, Body `{ name }`) | Anzeigename ändern |
-| `/api/chat` | `POST` `{ messages }` | Chat-Anfrage, Antwort als gestreamter Text |
-
-Der Login ist optional – ohne Konto kann man als Gast weiterchatten. Chats werden pro Konto (bzw. für Gäste separat) im Browser gespeichert.
+> **Modellwahl im laufenden Betrieb:** Der `CHATLITE_PROVIDER` in der `.env`
+> setzt nur den *Standard*. Im Modell-Umschalter der App kann jederzeit
+> zwischen allen konfigurierten Anbietern und Modellen gewechselt werden
+> (inkl. Live-Abfrage aller verfügbaren Modelle beim OpenAI-kompatiblen
+> Anbieter, z. B. der komplette OpenRouter-Katalog).
 
 ---
 
-## 🌍 Mehrsprachigkeit
+## 🐳 Docker
 
-Die Oberfläche gibt es komplett auf **Deutsch, Englisch, Französisch und Spanisch** – umschaltbar über den kleinen Sprachwähler oben in der Sidebar (🇩🇪 🇬🇧 🇫🇷 🇪🇸).
+```bash
+docker compose up -d
+```
 
-- Übersetzt werden alle Buttons, Platzhalter, Tooltips, die Login/Registrieren-Maske, Fehler-/Bestätigungsmeldungen sowie die **Willkommensnachricht** beim Start eines neuen Chats.
-- Die Wahl wird im Browser gespeichert (`localStorage`) und beim nächsten Besuch automatisch wieder geladen; ohne vorherige Auswahl wird die Browsersprache erkannt (Fallback: Deutsch).
-- Markenname ("Chipilito") sowie die Widmung in der Kopfzeile bleiben unabhängig von der gewählten Sprache unverändert.
+Startet Chipilito **und** einen lokalen Ollama-Container. Daten (SQLite-DB,
+Ollama-Modelle) liegen in benannten Docker-Volumes und überleben Neustarts.
+Für NVIDIA-GPU-Beschleunigung von Ollama die entsprechenden Zeilen in
+`docker-compose.yml` einkommentieren.
+
+Nur die App ohne Compose bauen:
+
+```bash
+docker build -t chipilito .
+docker run -p 3000:3000 -v chipilito_data:/app/data chipilito
+```
 
 ---
 
-## 🗺️ Projektstruktur
+## 🗂️ Projektstruktur
 
 ```
 chipilito/
-├── server.js        # Hauptserver (Auth, Chat-Routing, Datei-Extraktion)
-├── db.js            # SQLite-Benutzerverwaltung (better-sqlite3)
+├── server.js              # Dünner Einstiegspunkt: erstellt den HTTP-Server,
+│                           # verdrahtet die Routen-Module
+├── server/
+│   ├── config.js           # Zentrale Konfiguration (liest .env)
+│   ├── http-utils.js        # readJsonBody, sendJson, serveStatic, ...
+│   ├── router.js            # Schlanker Routen-Matcher (kein Express)
+│   ├── file-extraction.js   # PDF/Word/Excel/ZIP-Textextraktion für Uploads
+│   ├── providers/
+│   │   ├── ollama.js
+│   │   ├── gemini.js
+│   │   └── openaiCompatible.js
+│   └── routes/
+│       ├── auth.js, models.js, chats.js, projects.js
+│       ├── favorites.js, chat-completion.js, export.js
+├── db.js                   # SQLite-Zugriff (Nutzer, Chats, Projekte, Favoriten)
+├── export.js                # PDF/Word/Excel-Dokumentengenerierung
 ├── public/
-│   ├── index.html   # UI
-│   ├── styles.css
-│   └── app.js        # Frontend-Logik (Chat, Auth-Modal, Dateiupload)
-└── .env              # Konfiguration
+│   ├── index.html
+│   ├── app.js               # Gesamte Frontend-Logik (kein Build-Schritt nötig)
+│   └── styles.css
+├── .env.example
+├── Dockerfile
+├── docker-compose.yml
+└── CHANGELOG.md
 ```
 
+Kein Bundler, kein Build-Schritt fürs Frontend – `public/` wird direkt vom
+Server ausgeliefert. Das Backend ist in kleine, fokussierte Module aufgeteilt
+(siehe oben) statt einer einzigen großen `server.js`.
+
 ---
+
+## 🔌 API-Übersicht
+
+Alle Endpoints erwarten (außer Auth) den Header `x-api-key` mit dem beim
+Login erhaltenen Schlüssel.
+
+| Methode | Pfad | Zweck |
+|---|---|---|
+| `POST` | `/api/auth/register` / `/api/auth/login` | Konto anlegen / einloggen |
+| `GET`/`PUT` | `/api/auth/profile` | Profil lesen / Namen ändern |
+| `GET` | `/api/models` | Verfügbare Modelle je Anbieter |
+| `POST` | `/api/chat` | Nachricht senden (Streaming-Antwort) |
+| `GET`/`PUT`/`DELETE` | `/api/chats/:id` | Chat laden/speichern/löschen |
+| `PUT` | `/api/chats/:id/pin` \| `/rename` | Chat anheften / umbenennen |
+| `POST` | `/api/chats/:id/addToProject` | Projekt zuordnen (`project_id: null` entfernt) |
+| `GET`/`POST` | `/api/yumProjects` | Projekte auflisten / anlegen |
+| `PUT`/`DELETE` | `/api/yumProjects/:id` | Projekt umbenennen / löschen |
+| `GET`/`PUT` | `/api/favorites` | Favorisierte Modelle laden / speichern |
+
+---
+
+## 🛠️ Tech-Stack
+
+- **Backend:** Node.js (ESM), reines `http`-Modul (kein Express im
+  Request-Pfad), [better-sqlite3](https://github.com/WiseLibs/better-sqlite3)
+- **Frontend:** Vanilla JS, kein Framework, [highlight.js](https://highlightjs.org)
+  für Syntax-Highlighting, [JSZip](https://stuk.github.io/jszip/) für
+  ZIP-Downloads
+- **Export:** [pdfkit](https://pdfkit.org), [docx](https://docx.js.org),
+  [exceljs](https://github.com/exceljs/exceljs)
+- **Datei-Parsing:** [pdf-parse](https://www.npmjs.com/package/pdf-parse),
+  [mammoth](https://github.com/mwilliamson/mammoth.js) (Word),
+  [adm-zip](https://github.com/cthackers/adm-zip)
+
+---
+
 ## 📄 Lizenz
 
-Dieses Projekt ist unter der MIT-Lizenz lizenziert. Siehe die [LICENSE](LICENSE)-Datei für Details.
+MIT – siehe [`LICENSE`](LICENSE) (bzw. nach Bedarf ergänzen).
 
----
+## 📝 Changelog
 
+Alle Änderungen sind in [`CHANGELOG.md`](CHANGELOG.md) dokumentiert.
 ## 👥 Mitwirken & Support
 
 Beiträge, Fehlerberichte und Feature-Anfragen sind herzlich willkommen! Erstelle dazu einfach ein Issue oder einen Pull Request.
