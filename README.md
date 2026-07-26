@@ -45,8 +45,7 @@ Node.js, SQLite und ein einziger Server-Prozess.
 
 ## 📸 Screenshot
 
-*(Füge hier gerne einen Screenshot deiner Instanz ein, z. B.
-`![Chipilito](docs/screenshot.png)`)*
+![Dashboard](docs/screenshot.png)
 
 ---
 
